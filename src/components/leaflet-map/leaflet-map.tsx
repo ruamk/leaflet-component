@@ -194,6 +194,13 @@ export class LeafletMarker {
   }
 
   getIcon(el: any) {
+    if (el.getAttribute('use-div-icon')) {
+      return L.divIcon({
+        html: el.getAttribute('html'),
+        iconSize: [el.getAttribute('icon-width') || 32, el.getAttribute('icon-height') || 32]
+      });
+    }
+
     return L.icon({
       iconUrl: el.getAttribute('icon-url'),
       iconSize: [el.getAttribute('icon-width') || 32, el.getAttribute('icon-height') || 32]
@@ -232,11 +239,10 @@ export class LeafletMarker {
             marker.layer.bindPopup(e.textContent).openPopup();
           }
 
-          if (e.getAttribute('icon-url')) {
-            const icon = this.getIcon(e)
+          const icon = this.getIcon(e)
 
-            marker.layer.setIcon(icon);
-          }
+          marker.layer.setIcon(icon);
+          
         } else if (e.nodeName === "LEAFLET-CIRCLE") {
           const opts = {
             radius: e.getAttribute('radius'),
